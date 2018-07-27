@@ -14,57 +14,56 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vehicle.demo.dao.VehicleRepo;
 import com.vehicle.demo.model.Vehicle;
+import com.vehicle.demo.service.VehicleService;
 
 @RestController
 public class VehicleController {
 	
 	@Autowired
 	VehicleRepo repo;
-	
+	@Autowired
+	VehicleService service;
 	@GetMapping(value="/vehicle")
 	public List<Vehicle> getVehicles()
 	{
-		return repo.findAll();
+		return service.getVehicles();
 	}
 	
 	@GetMapping(value="/vehicle/{id}")
-	public Optional<Vehicle> getVehicle( @PathVariable int id)
+	public Vehicle getVehicle( @PathVariable int id)
 	{
-		return repo.findById(id);
+		return service.getVehicle(id);
 	}
 	
-	@GetMapping(value="/vehicle/vehicleByTransportMedium/{mediumOfTransport}")
-	public List<Vehicle> getVehicle( @PathVariable String mediumOfTransport)
+	@GetMapping(value="/vehicle/transportMedium/{mediumOfTransport}")
+	public List<Vehicle> getVehicleMediumOfTransport( @PathVariable String mediumOfTransport)
 	{
-		return repo.findByMediumOfTransport(mediumOfTransport);
+		return service.getVehicleMediumOfTransport(mediumOfTransport);
 	}
 	
-	@GetMapping(value="/vehicle/{vehicleType}")
+	@GetMapping(value="/vehicle/type/{vehicleType}")
 	public List<Vehicle> getVehicleType( @PathVariable String vehicleType)
 	{
-		return repo.findByVehicleType(vehicleType);
+		return service.getVehicleType(vehicleType);
 	}
 	
 	@PostMapping(value="/vehicle" ,consumes= {"application/json"})
 	public Vehicle addVehicle(@RequestBody Vehicle vehicle)
 	{
-		repo.save(vehicle);
-		return vehicle;
+		
+		return service.addVehicle(vehicle);
 	}
 	
 	@DeleteMapping(value="/vehicle/{id}")
 	public String deleteVehicle( @PathVariable int id)
 	{
-		Vehicle vehicle= repo.getOne(id);
-		repo.delete(vehicle);
-		return id+" deleted";
+		return service.deleteVehicle(id);
 	}
 	
 	@PutMapping(value="/vehicle" ,consumes= {"application/json"})
 	public Vehicle saveorUpdateVehicle(@RequestBody Vehicle vehicle)
 	{
-		repo.save(vehicle);
-		return vehicle;
+		return service.saveorUpdateVehicle(vehicle);
 	}
 	
 	

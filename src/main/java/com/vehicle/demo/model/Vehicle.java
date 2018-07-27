@@ -7,6 +7,18 @@ import javax.persistence.Id;
 
 @Entity
 public class Vehicle {
+	public Vehicle(int id, String color, String make, String mediumOfTransport, String model, String vehicleType) {
+		// TODO Auto-generated constructor stub
+		
+		this.id=id;
+		this.color=color;
+		this.make=make;
+		this.mediumOfTransport=mediumOfTransport;
+		this.model=model;
+		this.vehicleType=vehicleType;
+	}
+	public Vehicle() {		
+	}
 	@Id
 	@GeneratedValue
 	public int getId() {
@@ -55,6 +67,10 @@ public class Vehicle {
 	public String toString() {
 		return "Vehicle [id=" + id + ", model=" + model + ", vehicleType=" + vehicleType + ", make=" + make + ", color="
 				+ color + ", mediumOfTransport=" + mediumOfTransport + "]";
+	}
+	public Vehicle thenReturn(Vehicle mockVehicle) {
+		// TODO Auto-generated method stub
+		return mockVehicle;
 	}
 	
 
