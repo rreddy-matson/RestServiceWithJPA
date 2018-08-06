@@ -4,13 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.vehicle</groupId>
-	<artifactId>bootdemo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>vehicleDemo</artifactId>
 	<packaging>war</packaging>
-
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
-
+	
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -67,15 +63,8 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			 <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.7.0</version>
-            <configuration>
-                <fork>true</fork>
-                <executable>C:\Program Files\java\jdk1.8.0_77\bin\javac.exe</executable>
-            </configuration>
-        </plugin>
 		</plugins>
+		<finalName>vehicleDemo</finalName>
 	</build>
 
 

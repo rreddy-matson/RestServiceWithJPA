@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -13,10 +11,8 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,7 +20,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.vehicle.demo.dao.VehicleRepo;
 import com.vehicle.demo.model.Vehicle;
 import com.vehicle.demo.service.VehicleService;
 
@@ -35,8 +30,8 @@ public class VehicleControllerTest {
 	private MockMvc mockMvc;
 	@MockBean
 	private VehicleService vehicleService;
-	@MockBean
-	private VehicleRepo vehicleRepo;
+
+	
 	Vehicle mockVehicle = new Vehicle (1,"red","audi","land","A6","car");
 	String expectedJson= "{id: 1,model:A6,vehicleType:car,make:audi,color:red,mediumOfTransport:land}";
 	String expectedJsonArray="[{id: 1,model:A6,vehicleType:car,make:audi,color:red,mediumOfTransport:land}]";
@@ -51,10 +46,9 @@ public class VehicleControllerTest {
 				.accept(MediaType.APPLICATION_JSON);
 		try {
 			MvcResult result =mockMvc.perform(requestBuilder).andReturn();
-			System.out.println(result.getResponse().getContentAsString());
+			//System.out.println("testGetVehicles: "+result.getResponse().getContentAsString());
 			JSONAssert.assertEquals(expectedJsonArray,result.getResponse().getContentAsString(),false);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -68,7 +62,6 @@ public class VehicleControllerTest {
 				.accept(MediaType.APPLICATION_JSON);
 		try {
 			MvcResult result =mockMvc.perform(requestBuilder).andReturn();
-			System.out.println(result.getResponse().getContentAsString());
 			JSONAssert.assertEquals(expectedJson,result.getResponse().getContentAsString(),false);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -85,7 +78,6 @@ public class VehicleControllerTest {
 				.accept(MediaType.APPLICATION_JSON);
 		try {
 			MvcResult result =mockMvc.perform(requestBuilder).andReturn();
-			System.out.println(result.getResponse().getContentAsString());
 			JSONAssert.assertEquals(expectedJsonArray,result.getResponse().getContentAsString(),false);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -102,7 +94,6 @@ public class VehicleControllerTest {
 				.accept(MediaType.APPLICATION_JSON);
 		try {
 			MvcResult result =mockMvc.perform(requestBuilder).andReturn();
-			System.out.println(result.getResponse().getContentAsString());
 			JSONAssert.assertEquals(expectedJsonArray,result.getResponse().getContentAsString(),false);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -118,7 +109,6 @@ public class VehicleControllerTest {
 		try {
 			MvcResult result =mockMvc.perform(requestBuilder).andReturn();
 			MockHttpServletResponse  response= result.getResponse();
-			System.out.println(result.getResponse().getContentAsString());
 			assertEquals(HttpStatus.OK.value(),response.getStatus());
 			JSONAssert.assertEquals(expectedJson,result.getResponse().getContentAsString(),false);
 			
@@ -131,12 +121,39 @@ public class VehicleControllerTest {
 
 	@Test
 	public void testDeleteVehicle() {
-		
+		Mockito.when(vehicleService.deleteVehicle(Mockito.anyInt())).thenReturn("deleted");
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/vehicle/1")
+				.accept(MediaType.APPLICATION_JSON);
+		try {
+			MvcResult result =mockMvc.perform(requestBuilder).andReturn();
+			MockHttpServletResponse  response= result.getResponse();
+			assertEquals(HttpStatus.OK.value(),response.getStatus());
+			assertEquals("deleted",result.getResponse().getContentAsString());
+			
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Test
 	public void testSaveorUpdateVehicle() {
-		//fail("Not yet implemented");
+		
+		Mockito.when(vehicleService.saveorUpdateVehicle(Mockito.any(Vehicle.class))).thenReturn(mockVehicle);
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/vehicle")
+				.accept(MediaType.APPLICATION_JSON).content(exampleVehicleJson).contentType(MediaType.APPLICATION_JSON);
+		try {
+			MvcResult result =mockMvc.perform(requestBuilder).andReturn();
+			MockHttpServletResponse  response= result.getResponse();
+			assertEquals(HttpStatus.OK.value(),response.getStatus());
+			JSONAssert.assertEquals(expectedJson,result.getResponse().getContentAsString(),false);
+			
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
